@@ -75,10 +75,10 @@ def row_column_check(board,x,y,num):
 def box_check(board,x,y,num):
 	#Get current box
 	b1 = (y // 3) * 3
-	b2 = (x // 3)* 3 + 3
+	b2 = (x // 3)* 3 
 
-	for i in range(b2,b2):
-		for a in range(b1,b1):
+	for i in range(b2,b2+3):
+		for a in range(b1,b1+3):
 			if(board[i][a] == num and (i,a) != (x,y)):
 				return False
 
