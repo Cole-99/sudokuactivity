@@ -1,5 +1,4 @@
 # Team Evee
-
 class Board:
 	board1 = [
 		[0,2,0,6,0,8,0,0,0],
@@ -38,6 +37,7 @@ class Board:
 		[3,4,5,2,8,6,1,7,9]
 	]
 
+	#TODO start with a random board
 	def __init__(self):
 		self.board = self.board1
 		
