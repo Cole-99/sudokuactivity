@@ -1,4 +1,5 @@
 import pygame
+import Board
 
 class Sudoku:
 	def __init__(self):
@@ -17,18 +18,11 @@ class Sudoku:
 		clock = pygame.time.Clock()
 		mousePos = pygame.mouse.get_pos()
 		points = []
-		board = [
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0],
-					[0,0,0,0,0,0,0,0,0]
-				]	
-				
+		boardRef = Board.Board()
+		board = boardRef.getBoard()
+		black = (0, 0, 0)
+		red = (255, 0, 0)
+		
 		rectBoard = []
 		hasClicked = False
 		selected = False
@@ -88,9 +82,10 @@ class Sudoku:
 					pygame.draw.rect(screen, (255, 14, 255), rect, 5)
 					
 					if board[x][y] is not 0:
-						drawValue(screen, rect, board[x][y], font)
-					else:
-						drawValue(screen, rect, "", font)
+						if boardRef.can_insert(board[x][y], (x, y)):
+							drawValue(screen, rect, board[x][y], font, black)
+						else:
+							drawValue(screen, rect, board[x][y], font, red)
 			
 			# Vertical lines
 			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 2) - 1), ((height/2) - (boxSize * 5) - 2)), (((width/2) - (boxSize * 2) - 1), ((height/2) + (boxSize * 4) + 1)), 6)
@@ -121,7 +116,16 @@ class Sudoku:
 					print whatBox
 					
 					if keyPressed is not 0:
-						board[x - (9 * (x // 9))][x // 9] = keyPressed
+						tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
+						#if boardRef.can_insert(keyPressed, tempPos):
+						board[tempPos[0]][tempPos[1]] = keyPressed
+						#else:
+							#pygame.draw.rect(screen, (255, 0, 0), selectedRect, 5)
+							
+							#if board[tempPos[0]][tempPos[1]] != keyPressed:
+								#board[tempPos[0]][tempPos[1]] = keyPressed
+								
+							#drawValue(screen, selectedRect, keyPressed, font, red)
 					#drawValue(screen, selectedRect, keyPressed, font)
 				else:
 					selected = False
@@ -143,8 +147,8 @@ def drawBox(screen, mPos, rectBoard):
 	pygame.draw.rect(screen, (12, 14, 84), rect, 5)
 	
 # Draws the typed in value in the box provided
-def drawValue(screen, rect, val, font):
-	text = font.render(str(val), 1, (0,0,0))
+def drawValue(screen, rect, val, font, color):
+	text = font.render(str(val), 1, color)
 	screen.blit(text, ((rect.center[0] - 10), (rect.center[1] - 10)))
 	
 def main ():
