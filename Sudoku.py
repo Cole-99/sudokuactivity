@@ -10,30 +10,49 @@ class Sudoku:
 		
 	def run(self):
 		self.running = True
+		
+		###Pygame initializations###
 		pygame.init()
 		screen = pygame.display.get_surface()
 		width = screen.get_width()
 		height = screen.get_height()
-		boxSize = 50
 		clock = pygame.time.Clock()
 		mousePos = pygame.mouse.get_pos()
+		font = pygame.font.SysFont("comicsans", 40)
+		
+		###Game variables###
+		
+		# Mouse positions, for debugging can remove
 		points = []
+		
+		# Board object
 		boardRef = Board.Board()
+		
+		# Board array
 		board = boardRef.getBoard()
+		
+		# Colors
 		black = (0, 0, 0)
 		red = (255, 0, 0)
+		gray = (128, 128, 128)
 		
+		# Box size, will change size of entire drawn board
+		boxSize = 50
+		
+		# Array of pygame.Rect objects
 		rectBoard = []
+		
+		# Input
 		hasClicked = False
 		selected = False
 		selectedRect = None
-		prevSelectedRect = None
 		keyPressed = 0
-		font = pygame.font.SysFont("comicsans", 40)
 		
+		# Game loop
 		while self.running:
 			pressed = pygame.key.get_pressed()
 			
+			# Handling input
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					return
@@ -71,7 +90,7 @@ class Sudoku:
 		
 					
 					
-			
+			# Clear board before new drawing
 			screen.fill((255, 255, 255))
 			
 			# Draw board
@@ -79,8 +98,9 @@ class Sudoku:
 				for x in range(9):
 					rect = pygame.Rect(((width/2) - ((boxSize * 5) - (boxSize * x))), ((height/2) - ((boxSize * 5) - (boxSize * y))), boxSize, boxSize)
 					rectBoard += [rect]
-					pygame.draw.rect(screen, (255, 14, 255), rect, 5)
+					pygame.draw.rect(screen, gray, rect, 5)
 					
+					# Filling in boxes with values from board array
 					if board[x][y] is not 0:
 						if boardRef.can_insert(board[x][y], (x, y)):
 							drawValue(screen, rect, board[x][y], font, black)
@@ -94,6 +114,8 @@ class Sudoku:
 			# Horizontal lines
 			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) - (boxSize * 2) - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) - (boxSize * 2) - 1)), 6)
 			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) + boxSize - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) + boxSize - 1)), 6)
+			
+			# Mouse tracking can remove later
 			for p in points:
 				pygame.draw.circle(screen, (255, 14, 255), p, 10)
 				
@@ -109,6 +131,8 @@ class Sudoku:
 				if selectedRect is not None:
 					pygame.draw.rect(screen, (12, 14, 84), selectedRect, 5)
 					whatBox = 0
+					
+					# Get the box number that was selected
 					for x in range(len(rectBoard)):
 						if selectedRect == rectBoard[x]:
 							whatBox = x
@@ -131,6 +155,7 @@ class Sudoku:
 					selected = False
 					
 
+			# reset board for new values
 			points = []
 			rectBoard = []
 			pygame.display.flip()
