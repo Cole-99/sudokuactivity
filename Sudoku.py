@@ -91,7 +91,11 @@ class Sudoku:
 						drawValue(screen, rect, board[x][y], font)
 					else:
 						drawValue(screen, rect, "", font)
-				
+			
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 101), ((height/2) - 252)), (((width/2) - 101), ((height/2) + 201)), 6)
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) + 49), ((height/2) - 252)), (((width/2) + 49), ((height/2) + 201)), 6)
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 252), ((height/2) - 101)), (((width/2) + 201), ((height/2) - 101)), 6)
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 252), ((height/2) + 49)), (((width/2) + 201), ((height/2) + 49)), 6)
 			for p in points:
 				pygame.draw.circle(screen, (255, 14, 255), p, 10)
 				
