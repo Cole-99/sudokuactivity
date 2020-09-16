@@ -13,7 +13,7 @@ class Sudoku:
 		screen = pygame.display.get_surface()
 		width = screen.get_width()
 		height = screen.get_height()
-		dif = 500 / 9
+		boxSize = 50
 		clock = pygame.time.Clock()
 		mousePos = pygame.mouse.get_pos()
 		points = []
@@ -83,7 +83,7 @@ class Sudoku:
 			# Draw board
 			for y in range (9):
 				for x in range(9):
-					rect = pygame.Rect(((width/2) - (250 - (50 * x))), ((height/2) - (250 - (50 * y))), 50, 50)
+					rect = pygame.Rect(((width/2) - ((boxSize * 5) - (boxSize * x))), ((height/2) - ((boxSize * 5) - (boxSize * y))), boxSize, boxSize)
 					rectBoard += [rect]
 					pygame.draw.rect(screen, (255, 14, 255), rect, 5)
 					
@@ -92,10 +92,13 @@ class Sudoku:
 					else:
 						drawValue(screen, rect, "", font)
 			
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 101), ((height/2) - 252)), (((width/2) - 101), ((height/2) + 201)), 6)
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) + 49), ((height/2) - 252)), (((width/2) + 49), ((height/2) + 201)), 6)
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 252), ((height/2) - 101)), (((width/2) + 201), ((height/2) - 101)), 6)
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - 252), ((height/2) + 49)), (((width/2) + 201), ((height/2) + 49)), 6)
+			# Vertical lines
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 2) - 1), ((height/2) - (boxSize * 5) - 2)), (((width/2) - (boxSize * 2) - 1), ((height/2) + (boxSize * 4) + 1)), 6)
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) + boxSize - 1), ((height/2) - (boxSize * 5) - 2)), (((width/2) + boxSize - 1), ((height/2) + (boxSize * 4) + 1)), 6)
+			
+			# Horizontal lines
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) - (boxSize * 2) - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) - (boxSize * 2) - 1)), 6)
+			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) + boxSize - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) + boxSize - 1)), 6)
 			for p in points:
 				pygame.draw.circle(screen, (255, 14, 255), p, 10)
 				

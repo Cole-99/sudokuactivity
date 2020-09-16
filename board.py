@@ -131,15 +131,15 @@ sys.setrecursionlimit(1000)
 
 def main():
 	#Testing below
-	displayboard(board1)
+	displayboard(board2)
 	print("")
 	print("")
 	print("")
 
-	solve(board1)
-	displayboard(board1)
+	solve(board2)
+	displayboard(board2)
 
-	if(check_board(board1)):
+	if(check_board(board2)):
 		print("all good")
 	else:
 		print("not correct")
