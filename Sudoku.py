@@ -50,7 +50,6 @@ class Sudoku:
 
 				if event.type == pygame.MOUSEMOTION:
 					pos = pygame.mouse.get_pos()
-					print pos
 					points += [pos]
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					hasClicked = True
@@ -85,6 +84,11 @@ class Sudoku:
 				for x in range(9):
 					rect = pygame.Rect(((width/2) - (250 - (50 * x))), ((height/2) - (250 - (50 * y))), 50, 50)
 					rectBoard += [rect]
+					pygame.draw.line(screen, (0, 14, 255), (860,740),(860,290), 5)
+					pygame.draw.line(screen, (0, 14, 255), (1010,740),(1010,290), 5)
+					pygame.draw.line(screen, (0, 14, 255), (710,589),(1160,589), 5)
+					pygame.draw.line(screen, (0, 14, 255), (710,439),(1160,439), 5)
+						
 					pygame.draw.rect(screen, (255, 14, 255), rect, 5)
 					
 					if board[x][y] is not 0:
@@ -111,7 +115,7 @@ class Sudoku:
 						if selectedRect == rectBoard[x]:
 							whatBox = x
 							break
-					print whatBox
+					
 					
 					if keyPressed is not 0:
 						board[x - (9 * (x // 9))][x // 9] = keyPressed
@@ -131,7 +135,7 @@ def drawBox(screen, mPos, rectBoard):
 	for r in rectBoard:
 		if r.contains(rect):
 			pygame.draw.rect(screen, (12, 14, 84), r, 5)
-			print "collided"
+			
 			return r
 	pygame.draw.rect(screen, (12, 14, 84), rect, 5)
 	
