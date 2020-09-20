@@ -30,7 +30,11 @@ class Sudoku:
 		
 		# Board array
 		board = boardRef.getBoard()
-		
+		#Copying original board
+		boardOriginal = copy2DValues(board)
+		print board
+		print "\n\n"
+		print boardOriginal
 		# Colors
 		black = (0, 0, 0)
 		red = (255, 0, 0)
@@ -63,7 +67,7 @@ class Sudoku:
 
 				if event.type == pygame.MOUSEMOTION:
 					pos = pygame.mouse.get_pos()
-					print pos
+					#print pos
 					points += [pos]
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					hasClicked = True
@@ -87,6 +91,12 @@ class Sudoku:
 						keyPressed = 8
 					elif event.key == pygame.K_9:
 						keyPressed = 9
+					elif event.key == pygame.K_r:
+						board = copy2DValues(boardOriginal)
+						boardRef.setBoard(board)
+					elif event.key == pygame.K_q:
+						boardRef.solve()
+
 		
 					
 					
@@ -137,7 +147,7 @@ class Sudoku:
 						if selectedRect == rectBoard[x]:
 							whatBox = x
 							break
-					print whatBox
+					#print whatBox
 					
 					if keyPressed is not 0:
 						tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
@@ -154,7 +164,9 @@ class Sudoku:
 				else:
 					selected = False
 					
-
+			
+			# update boardRef with board
+			boardRef.setBoard(board)
 			# reset board for new values
 			points = []
 			rectBoard = []
@@ -175,6 +187,9 @@ def drawBox(screen, mPos, rectBoard):
 def drawValue(screen, rect, val, font, color):
 	text = font.render(str(val), 1, color)
 	screen.blit(text, ((rect.center[0] - 10), (rect.center[1] - 10)))
+	
+def copy2DValues(fromA):
+	return [[fromA[y][x] for x in range(len(fromA))] for y in range(len(fromA[0]))]
 	
 def main ():
 	pygame.init()

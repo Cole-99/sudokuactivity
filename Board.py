@@ -24,6 +24,17 @@ class Board:
 		[7,0,0,0,6,0,0,2,8]
 	]
 
+	board3 = [
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0]
+	]
 
 	completeboard = [
 		[5,3,4,6,7,8,9,1,2],
@@ -43,6 +54,9 @@ class Board:
 		
 	def getBoard(self):
 		return self.board
+
+	def setBoard(self, newBoard):
+		self.board = newBoard
 
 	#Displays board to standard output, this will be replaced by GUI.
 	def displayboard(self):
@@ -120,7 +134,7 @@ class Board:
 
 	# Solves the current board using backtracking.
 	def solve(self):
-		pos = self.get_next(self.board)
+		pos = self.get_next()
 		if not pos:
 			return True
 		else:
@@ -128,8 +142,8 @@ class Board:
 
 		for i in range(1,10):
 			if (self.row_column_check(row,col,i) == True and self.box_check(row,col,i) == True):
-				board[row][col] = i
-				if(self.solve(self.board)):
+				self.board[row][col] = i
+				if(self.solve()):
 					return True
 				self.board[row][col] = 0
 
