@@ -37,7 +37,7 @@ from sugar3.activity.widgets import StopButton
 sys.path.append('..')
 import sugargame.canvas
 
-import TestGame
+import Sudoku
 
 
 class TestActivity(Activity):
@@ -48,7 +48,7 @@ class TestActivity(Activity):
         self.paused = False
 
         # Create the game instance.
-        self.game = TestGame.TestGame()
+        self.game = Sudoku.Sudoku()
 
         # Build the activity toolbar.
         self.build_toolbar()
