@@ -20,13 +20,19 @@ class Sudoku:
 		mousePos = pygame.mouse.get_pos()
 		font = pygame.font.SysFont("comicsans", 40)
 		
-		###Game variables###
+		# Colors
+		black = (0, 0, 0)
+		red = (255, 0, 0)
+		gray = (128, 128, 128)
 		
+		###Game variables###
+
 		# Mouse positions, for debugging can remove
 		points = []
 		
 		# Board object
-		boardRef = Board.Board()
+		# Input is difficulty
+		boardRef = Board.Board(3)
 		
 		# Board array
 		board = boardRef.getBoard()
@@ -35,10 +41,7 @@ class Sudoku:
 		print board
 		print "\n\n"
 		print boardOriginal
-		# Colors
-		black = (0, 0, 0)
-		red = (255, 0, 0)
-		gray = (128, 128, 128)
+
 		
 		# Box size, will change size of entire drawn board
 		boxSize = 50
@@ -95,8 +98,7 @@ class Sudoku:
 						board = copy2DValues(boardOriginal)
 						boardRef.setBoard(board)
 					elif event.key == pygame.K_q:
-						boardRef.solve()
-
+						board = copy2DValues(boardRef.getSolution())
 		
 					
 					
