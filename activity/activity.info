@@ -1,6 +1,7 @@
 [Activity]
-name = SugargameTest
+name = SudokuActivity
 bundle_id = org.sugarlabs.SugargameTest
 exec = sugar-activity TestActivity.TestActivity
-icon = activity-generic
+icon = sudoku-activity
 activity_version = 1
+summary = Solve a Sudoku puzzle.
