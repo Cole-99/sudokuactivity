@@ -59,6 +59,12 @@ class Sudoku:
 		while self.running:
 			pressed = pygame.key.get_pressed()
 			
+			 # Pump GTK messages.
+			while Gtk.events_pending():
+				Gtk.main_iteration()
+		   	if not self.running:
+				break
+			
 			# Handling input
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
