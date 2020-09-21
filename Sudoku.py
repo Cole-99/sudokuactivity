@@ -35,6 +35,7 @@ class Sudoku:
 		
 		# Board object
 		# Input is difficulty
+		# I don't think we will have time to implement this
 		boardRef = Board.Board(3)
 		
 		# Board array
@@ -200,6 +201,8 @@ def drawValue(screen, rect, val, font, color):
 	text = font.render(str(val), 1, color)
 	screen.blit(text, ((rect.center[0] - 10), (rect.center[1] - 10)))
 
+# Returns a list of the box # an original number was in
+# An original number is defined as a number that was given initially with the Sudoku board before any change
 def get_original_places(board):
 	original_places = []
 	count = 0
