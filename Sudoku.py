@@ -41,6 +41,7 @@ class Sudoku:
 		board = boardRef.getBoard()
 		#Copying original board
 		boardOriginal = copy2DValues(board)
+		original = get_original_places(boardOriginal)
 		print board
 		print "\n\n"
 		print boardOriginal
@@ -65,7 +66,7 @@ class Sudoku:
 			 # Pump GTK messages.
 			while Gtk.events_pending():
 				Gtk.main_iteration()
-		   	if not self.running:
+			if not self.running:
 				break
 			
 			# Handling input
@@ -159,8 +160,8 @@ class Sudoku:
 							whatBox = x
 							break
 					#print whatBox
-					
-					if keyPressed is not 0:
+
+					if keyPressed is not 0 and whatBox not in original:
 						tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
 						#if boardRef.can_insert(keyPressed, tempPos):
 						board[tempPos[0]][tempPos[1]] = keyPressed
@@ -198,7 +199,18 @@ def drawBox(screen, mPos, rectBoard):
 def drawValue(screen, rect, val, font, color):
 	text = font.render(str(val), 1, color)
 	screen.blit(text, ((rect.center[0] - 10), (rect.center[1] - 10)))
-	
+
+def get_original_places(board):
+	original_places = []
+	count = 0
+	for a in range(len(board)):
+		for b in range(len(board[0])):
+			if board[b][a] != 0:
+				original_places.append((count))
+			count = count + 1
+	return original_places
+
+
 def copy2DValues(fromA):
 	return [[fromA[y][x] for x in range(len(fromA))] for y in range(len(fromA[0]))]
 	
