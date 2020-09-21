@@ -23,11 +23,13 @@
 from gettext import gettext as _
 
 import sys
+import os
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import pygame
 
+from sugar3.activity import activity
 from sugar3.activity.activity import Activity
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import ActivityToolbarButton
@@ -81,7 +83,17 @@ class TestActivity(Activity):
         pause_play.connect('clicked', self._pause_play_cb)
         pause_play.show()
 
-        toolbar_box.toolbar.insert(pause_play, -1)
+        toolbar_box.toolbar.insert(pause_play, 0)
+	
+		# Information button:
+		
+        info_button = ToolButton('info_button')
+        info_button.set_tooltip(_("Display Keybinds"))
+        info_button.set_accelerator(_('<shift>space'))
+        info_button.connect('clicked', self._open_info_cb)
+        info_button.show()
+		
+        toolbar_box.toolbar.insert(info_button, 1)
 
         # Blank space (separator) and Stop button at the end:
 
@@ -96,6 +108,9 @@ class TestActivity(Activity):
         stop_button.show()
         stop_button.connect('clicked', self._stop_cb)
 
+    def _open_info_cb(self, button):
+	    self.game.show_info()
+
     def _pause_play_cb(self, button):
         # Pause or unpause the game.
         self.paused = not self.paused
@@ -108,6 +123,11 @@ class TestActivity(Activity):
         else:
             button.set_icon_name('media-playback-pause')
             button.set_tooltip(_("Pause"))
+
+    def __icon_path(self, name):
+        activity_path = activity.get_bundle_path()
+        icon_path = os.path.join(activity_path, 'icons', name + '.svg')
+        return icon_path
 
     def _stop_cb(self, button):
         self.game.running = False

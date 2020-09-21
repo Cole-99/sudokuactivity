@@ -7,10 +7,15 @@ from gi.repository import Gtk
 class Sudoku:
 	def __init__(self):
 		self.clock = pygame.time.Clock()
+		self.paused = False
+		self.showInfo = False
 
 	def set_paused(self, paused):
 		self.paused = paused
 		
+	def show_info(self):
+		self.showInfo = not self.showInfo
+
 	def run(self):
 		self.running = True
 		
@@ -113,69 +118,82 @@ class Sudoku:
 		
 					
 					
-			# Clear board before new drawing
-			screen.fill((255, 255, 255))
 			
-			# Draw board
-			for y in range (9):
-				for x in range(9):
-					rect = pygame.Rect(((width/2) - ((boxSize * 5) - (boxSize * x))), ((height/2) - ((boxSize * 5) - (boxSize * y))), boxSize, boxSize)
-					rectBoard += [rect]
-					pygame.draw.rect(screen, gray, rect, 5)
-					
-					# Filling in boxes with values from board array
-					if board[x][y] is not 0:
-						if boardRef.can_insert(board[x][y], (x, y)):
-							drawValue(screen, rect, board[x][y], font, black)
-						else:
-							drawValue(screen, rect, board[x][y], font, red)
 			
-			# Vertical lines
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 2) - 1), ((height/2) - (boxSize * 5) - 2)), (((width/2) - (boxSize * 2) - 1), ((height/2) + (boxSize * 4) + 1)), 6)
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) + boxSize - 1), ((height/2) - (boxSize * 5) - 2)), (((width/2) + boxSize - 1), ((height/2) + (boxSize * 4) + 1)), 6)
-			
-			# Horizontal lines
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) - (boxSize * 2) - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) - (boxSize * 2) - 1)), 6)
-			pygame.draw.line(screen, (0, 0, 0), (((width/2) - (boxSize * 5) - 2), ((height/2) + boxSize - 1)), (((width/2) + (boxSize * 4) + 1), ((height/2) + boxSize - 1)), 6)
-			
-			# Mouse tracking can remove later
-			for p in points:
-				pygame.draw.circle(screen, (255, 14, 255), p, 10)
-				
-			# Check if user selected a box in board
-			if hasClicked:
-				keyPressed = 0
-				selectedRect = drawBox(screen, mousePos, rectBoard)
-				selected = True
-				hasClicked = False
-						
-			# Update selected box with number that is typed in, ignores 0
-			if selected:
-				if selectedRect is not None:
-					pygame.draw.rect(screen, (12, 14, 84), selectedRect, 5)
-					whatBox = 0
-					
-					# Get the box number that was selected
-					for x in range(len(rectBoard)):
-						if selectedRect == rectBoard[x]:
-							whatBox = x
-							break
-					#print whatBox
+			if not self.paused:
+				# Clear board before new drawing
+				screen.fill((255, 255, 255))
 
-					if keyPressed is not 0 and whatBox not in original:
-						tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
-						#if boardRef.can_insert(keyPressed, tempPos):
-						board[tempPos[0]][tempPos[1]] = keyPressed
-						#else:
-							#pygame.draw.rect(screen, (255, 0, 0), selectedRect, 5)
+				# Show info
+				if self.showInfo:
+					text = font.render("Pressing Q shows the solution.", 1, black)
+					text_rect = text.get_rect(center=(width/2, height/4))
+					screen.blit(text, text_rect)
+					
+					text = font.render("Pressing R resets the board.", 1, black)
+					text_rect = text.get_rect(center=(width/2, height/4 + 30))
+					screen.blit(text, text_rect)
+					
+				# Draw board
+				for y in range (9):
+					for x in range(9):
+						rect = pygame.Rect(((width/2) - ((boxSize * 5) - (boxSize * x))) + (boxSize / 2), ((height/2) - ((boxSize * 5) - (boxSize * y))) + (boxSize / 2), boxSize, boxSize)
+						rectBoard += [rect]
+						pygame.draw.rect(screen, gray, rect, 5)
+						
+						# Filling in boxes with values from board array
+						if board[x][y] is not 0:
+							if boardRef.can_insert(board[x][y], (x, y)):
+								drawValue(screen, rect, board[x][y], font, black)
+							else:
+								drawValue(screen, rect, board[x][y], font, red)
+				
+				# Vertical lines
+				pygame.draw.line(screen, black, (((width/2) - (boxSize * 2) - 1) + (boxSize / 2), ((height/2) - (boxSize * 5) - 2) + (boxSize / 2)), (((width/2) - (boxSize * 2) - 1) + (boxSize / 2), ((height/2) + (boxSize * 4) + 1) + (boxSize / 2)), 6)
+				pygame.draw.line(screen, black, (((width/2) + boxSize - 1) + (boxSize / 2), ((height/2) - (boxSize * 5) - 2) + (boxSize / 2)), (((width/2) + boxSize - 1) + (boxSize / 2), ((height/2) + (boxSize * 4) + 1) + (boxSize / 2)), 6)
+				
+				# Horizontal lines
+				pygame.draw.line(screen, black, (((width/2) - (boxSize * 5) - 2) + (boxSize / 2), ((height/2) - (boxSize * 2) - 1) + (boxSize / 2)), (((width/2) + (boxSize * 4) + 1) + (boxSize / 2), ((height/2) - (boxSize * 2) - 1) + (boxSize / 2)), 6)
+				pygame.draw.line(screen, black, (((width/2) - (boxSize * 5) - 2) + (boxSize / 2), ((height/2) + boxSize - 1) + (boxSize / 2)), (((width/2) + (boxSize * 4) + 1) + (boxSize / 2), ((height/2) + boxSize - 1) + (boxSize / 2)), 6)
+				
+				# Mouse tracking can remove later
+				for p in points:
+					pygame.draw.circle(screen, (255, 14, 255), p, 10)
+					
+				# Check if user selected a box in board
+				if hasClicked:
+					keyPressed = 0
+					selectedRect = drawBox(screen, mousePos, rectBoard)
+					selected = True
+					hasClicked = False
 							
-							#if board[tempPos[0]][tempPos[1]] != keyPressed:
-								#board[tempPos[0]][tempPos[1]] = keyPressed
+				# Update selected box with number that is typed in, ignores 0
+				if selected:
+					if selectedRect is not None:
+						pygame.draw.rect(screen, (12, 14, 84), selectedRect, 5)
+						whatBox = 0
+						
+						# Get the box number that was selected
+						for x in range(len(rectBoard)):
+							if selectedRect == rectBoard[x]:
+								whatBox = x
+								break
+						#print whatBox
+
+						if keyPressed is not 0 and whatBox not in original:
+							tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
+							#if boardRef.can_insert(keyPressed, tempPos):
+							board[tempPos[0]][tempPos[1]] = keyPressed
+							#else:
+								#pygame.draw.rect(screen, (255, 0, 0), selectedRect, 5)
 								
-							#drawValue(screen, selectedRect, keyPressed, font, red)
-					#drawValue(screen, selectedRect, keyPressed, font)
-				else:
-					selected = False
+								#if board[tempPos[0]][tempPos[1]] != keyPressed:
+									#board[tempPos[0]][tempPos[1]] = keyPressed
+									
+								#drawValue(screen, selectedRect, keyPressed, font, red)
+						#drawValue(screen, selectedRect, keyPressed, font)
+					else:
+						selected = False
 					
 			
 			# update boardRef with board
