@@ -166,6 +166,20 @@ class Sudoku:
 					selectedRect = drawBox(screen, mousePos, rectBoard)
 					selected = True
 					hasClicked = False
+
+					# Get the box number that was selected
+					for x in range(len(rectBoard)):
+						if selectedRect == rectBoard[x]:
+							whatBox = x
+							break
+					#print whatBox
+
+					if keyPressed is not 0 and whatBox not in original:
+						tempPos = [(whatBox - (9 * (whatBox // 9))), (whatBox // 9)]
+						#if boardRef.can_insert(keyPressed, tempPos):
+						board[tempPos[0]][tempPos[1]] = keyPressed
+						#else:
+							#pygame.draw.rect(screen, (255, 0, 0), selectedRect, 5)
 							
 				# Update selected box with number that is typed in, ignores 0
 				if selected:
